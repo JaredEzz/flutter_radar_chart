@@ -20,6 +20,8 @@ class RadarChart extends StatefulWidget {
   final bool reverseAxis;
   final TextStyle ticksTextStyle;
   final TextStyle featuresTextStyle;
+  final List<List<List<int>>> featuresPaddingLTRB;
+  final List<TextAlign> featuresAlignment;
   final Color outlineColor;
   final Color axisColor;
   final List<Color> graphColors;
@@ -33,6 +35,8 @@ class RadarChart extends StatefulWidget {
     this.reverseAxis = false,
     this.ticksTextStyle = const TextStyle(color: Colors.grey, fontSize: 12),
     this.featuresTextStyle = const TextStyle(color: Colors.black, fontSize: 16),
+    this.featuresAlignment = const [],
+    this.featuresPaddingLTRB = const [],
     this.outlineColor = Colors.black,
     this.axisColor = Colors.grey,
     this.graphColors = defaultGraphColors,
@@ -120,6 +124,8 @@ class _RadarChartState extends State<RadarChart>
           widget.reverseAxis,
           widget.ticksTextStyle,
           widget.featuresTextStyle,
+          widget.featuresPaddingLTRB,
+          widget.featuresAlignment,
           widget.outlineColor,
           widget.axisColor,
           widget.graphColors,
@@ -142,6 +148,8 @@ class RadarChartPainter extends CustomPainter {
   final bool reverseAxis;
   final TextStyle ticksTextStyle;
   final TextStyle featuresTextStyle;
+  final List<List<List<int>>> featuresPaddingLTRB;
+  final List<TextAlign> featuresAlignment;
   final Color outlineColor;
   final Color axisColor;
   final List<Color> graphColors;
@@ -155,6 +163,8 @@ class RadarChartPainter extends CustomPainter {
     this.reverseAxis,
     this.ticksTextStyle,
     this.featuresTextStyle,
+    this.featuresPaddingLTRB,
+    this.featuresAlignment,
     this.outlineColor,
     this.axisColor,
     this.graphColors,
@@ -264,7 +274,7 @@ class RadarChartPainter extends CustomPainter {
 
       TextPainter(
         text: TextSpan(text: feature, style: featuresTextStyle),
-        textAlign: TextAlign.left,
+        textAlign: featuresAlignment.isEmpty ? TextAlign.left : featuresAlignment[index],
         textDirection: TextDirection.ltr,
       )
         ..layout(minWidth: 0, maxWidth: size.width)
