@@ -15,6 +15,7 @@ const defaultGraphColors = [
 
 class RadarChart extends StatefulWidget {
   final List<int> ticks;
+  final List<String> tickLabels;
   final List<String> features;
   final List<List<num>> data;
   final bool reverseAxis;
@@ -32,6 +33,7 @@ class RadarChart extends StatefulWidget {
     required this.data,
     this.reverseAxis = false,
     this.ticksTextStyle = const TextStyle(color: Colors.grey, fontSize: 12),
+    this.tickLabels = const [],
     this.featuresTextStyle = const TextStyle(color: Colors.black, fontSize: 16),
     this.outlineColor = Colors.black,
     this.axisColor = Colors.grey,
@@ -115,6 +117,7 @@ class _RadarChartState extends State<RadarChart>
       size: Size(double.infinity, double.infinity),
       painter: RadarChartPainter(
           widget.ticks,
+          widget.tickLabels,
           widget.features,
           widget.data,
           widget.reverseAxis,
@@ -147,9 +150,11 @@ class RadarChartPainter extends CustomPainter {
   final List<Color> graphColors;
   final int sides;
   final double fraction;
+  List<String> tickLabels;
 
   RadarChartPainter(
     this.ticks,
+    this.tickLabels,
     this.features,
     this.data,
     this.reverseAxis,
@@ -215,7 +220,9 @@ class RadarChartPainter extends CustomPainter {
     // Painting the circles and labels for the given ticks (could be auto-generated)
     // The last tick is ignored, since it overlaps with the feature label
     var tickDistance = radius / (ticks.length);
-    var tickLabels = reverseAxis ? ticks.reversed.toList() : ticks;
+    if(tickLabels.isEmpty) {
+      tickLabels = (reverseAxis ? ticks.reversed.toList() : ticks).map((tick) => tick.toString()).toList();
+    }
 
     if (reverseAxis) {
       TextPainter(
